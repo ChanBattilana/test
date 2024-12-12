@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Multiple Choice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 20px;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #007BFF;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .question h3 {
+      margin-bottom: 10px;
+    }
+    .options {
+      margin-left: 20px;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    #submit {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #result {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    .correct {
+      color: green;
+    }
+    .incorrect {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Test de Opción Múltiple</h1>
+  <form id="testForm">
+    <!-- Aquí se insertan las preguntas dinámicamente -->
+  </form>
+  <button id="submit">Cargar Respuestas</button>
+  <div id="result"></div>
+
+  <script>
+    // Arreglo con las preguntas
+    const questions = [
+    {
+        "question": "Un lenguaje de programación permite la comunicación entre aplicaciones de software",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "Un sistema operativo es...",
+        "options": [
+          "Un software que permite controlar las operaciones de la empresa",
+          "Un conjunto de programas que ayudan al usuario en sus tareas cotidianas",
+          "Un conjunto de programas que facilitan las operaciones diarias",
+          "Programas que facilitan la ejecución de los procesos y brindan una interfase estándar para el uso del hardware",
+          "Un conjunto de programas que permiten controlar las operaciones cotidianas"
+        ],
+        "answer": "Programas que facilitan la ejecución de los procesos y brindan una interfase estándar para el uso del hardware"
+      },
+      {
+        "question": "La tecnología Hot-Swap permite reemplazar componentes dañados de un servidor sin necesidad de detener su funcionamiento",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "¿Cuál de los siguientes tipos de sistemas no corresponde a un tipo de sistema de apoyo a las decisiones?",
+        "options": ["DSS", "EIS", "CRM", "GDSS", "EDSS"],
+        "answer": "CRM"
+      },
+      {
+        "question": "En la arquitectura maestro-esclavo las funciones son instrumentadas por los esclavos las cuales se ejecutan a petición de los maestros.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "¿Cuál de los siguientes elementos no es un componente de una base de datos?",
+        "options": ["Software", "Computadora", "Concentrador de comunicaciones", "Usuarios", "Datos"],
+        "answer": "Concentrador de comunicaciones"
+      },
+      {
+        "question": "El perfil declara los derechos y restricciones de un usuario.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "OLTP pone el foco en la búsqueda y análisis de la información.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Falso"
+      },
+      {
+        "question": "¿Qué es data mining? Método para descubrir conocimiento en las redes.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "Las heurísticas son reglas que reducen una tarea compleja a pequeñas operaciones mentales.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "El código UNICODE es un código que traduce...",
+        "options": [
+          "128 caracteres y símbolos a 7 dígitos binarios",
+          "512 caracteres y símbolos a 9 dígitos binarios",
+          "Más de 1024 caracteres a una secuencia de entre 8 a 64 dígitos binarios",
+          "1024 caracteres y símbolos a 10 dígitos binarios",
+          "256 caracteres y símbolos a 8 dígitos binarios"
+        ],
+        "answer": "256 caracteres y símbolos a 8 dígitos binarios"
+      },
+      {
+        "question": "Los estilos arquitectónicos fueron desarrollados recientemente para uniformar la construcción de aplicaciones.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Falso"
+      },
+      {
+        "question": "Dentro de la característica evaluable denominada 'Funcionalidad', la 'Adecuación' hace referencia al conjunto de funciones apropiadas para las tareas y objetivos de los usuarios.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "La metadata de un datawarehouse contiene, entre otras cosas, las reglas de contenido y el formato de los datos.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "La minería de datos se refiere a la aplicación de métodos computacionales que permiten la obtención de conclusiones basadas en reglas de inferencia.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Falso"
+      },
+      {
+        "question": "La calidad de uso es la percepción de la calidad que se forma el usuario al utilizar la aplicación.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "La calidad en el software habla de la concordancia con las especificaciones.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "En la arquitectura Maestro-Esclavo no puede haber esclavos redundantes.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Falso"
+      },
+      {
+        "question": "La ingeniería de software es la disciplina que estudia las técnicas y herramientas para la construcción industrial de software.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "¿Cuál de las siguientes áreas NO corresponde a un área fundamental del software?",
+        "options": [
+          "Lenguajes de Programación",
+          "Utilitarios",
+          "Sistemas Operativos",
+          "Software Social",
+          "Productos Financieros"
+        ],
+        "answer": "Productos Financieros"
+      },
+      {
+        "question": "¿Los software de apoyo al usuario buscan mejorar las capacidades del equipo de trabajo?",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "¿Cuál de las siguientes siglas no corresponde a un sistema de apoyo a las decisiones?",
+        "options": ["DSS", "EDSS", "EIS", "CRM", "GDSS"],
+        "answer": "CRM"
+      },
+      {
+        "question": "Las copias de seguridad en internet deben estar permanentemente conectadas a la infraestructura para garantizar la seguridad de los datos.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Falso"
+      },
+      {
+        "question": "Un certificado digital asegura la identidad del emisor de un mensaje.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "Los sistemas de apoyo a las decisiones son un conjunto de programas y herramientas que permiten registrar detalladamente las operaciones de la empresa.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Falso"
+      },
+      {
+        "question": "¿Cuál de los siguientes elementos no forman parte de los que requieren la aplicación de normas / procedimientos de seguridad de la información?",
+        "options": ["Sistemas", "Servicios que se prestan", "Datos", "Accesos al edificio"],
+        "answer": "Accesos al edificio"
+      },
+      {
+        "question": "¿Cuál es la topología de redes locales más confiable?",
+        "options": ["Anillo", "Barra", "Estrella"],
+        "answer": "Estrella"
+      },
+      {
+        "question": "Las redes neuronales son procedimientos que simulan el comportamiento de las neuronas, ajustando la precisión de sus estimaciones en la medida que reciben datos.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "Medición es el proceso por el cual se asignan números o símbolos a los atributos de las entidades del mundo real.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "¿Cómo se almacena la información en la memoria principal?",
+        "options": [
+          "En conjuntos de valores 0 o 1",
+          "Como letras y números",
+          "Con los números del 0 al 9"
+        ],
+        "answer": "En conjuntos de valores 0 o 1"
+      },
+      {
+        "question": "¿Cuál de las opciones no corresponde a un periférico de un sistema de cómputos?",
+        "options": [
+          "Procesador",
+          "Cámara de Video",
+          "Lector de huellas digitales",
+          "Monitor",
+          "Sensor de Temperatura"
+        ],
+        "answer": "Procesador"
+      },
+      {
+        "question": "¿Qué utilidad tienen las computadoras del top500.org?",
+        "options": [
+          "Se ofrecen para que sean utilizadas por diferentes empresas y/o instituciones",
+          "Uso exclusivamente científico",
+          "Uso exclusivamente militar"
+        ],
+        "answer": "Uso exclusivamente científico"
+      },
+      {
+        "question": "La cláusula CIR sirve para...",
+        "options": [
+          "Gestionar tráfico",
+          "Filtrar los usuarios que puedan utilizar el servicio",
+          "Aceptar una tasa de degradación del servicio"
+        ],
+        "answer": "Aceptar una tasa de degradación del servicio"
+      },
+      {
+        "question": "Dentro de la característica evaluable denominada 'Mantenibilidad', la 'Estabilidad' hace referencia a la capacidad de los efectos inesperados en los cambios de las aplicaciones.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "Una arquitectura de software es una vista del producto de software que incluye los componentes y la conducta de esos componentes percibida por el resto del producto.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Verdadero"
+      },
+      {
+        "question": "Una arquitectura de software es una vista abstracta que aporta el más bajo nivel de compresión.",
+        "options": ["Verdadero", "Falso"],
+        "answer": "Falso"
+      },
+      {
+        "question": "¿Cuál de las siguientes áreas no corresponde a una de las definidas en las normas internacionales de seguridad de la información?",
+        "options": [
+          "Control de accesos",
+          "Clasificación y control de activos",
+          "Desarrollo y mantenimiento de aplicaciones",
+          "Continuidad de operaciones",
+          "Administración Financiera"
+        ],
+        "answer": "Administración Financiera"
+      },
+      {
+    "question": "El phishing es la suplantación de identidad en una red local.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "Los paradigmas de programación guían la forma en que se desarrolla el software.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "Los sistemas de apoyo a las decisiones son un conjunto de programas y herramientas que permiten registrar detalladamente las operaciones de la empresa.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Falso"
+  },
+  {
+    "question": "Las siglas HCI mencionadas en el marco de los CSCW significan human consulting industry.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Falso"
+  },
+  {
+    "question": "La comunicación telefónica tradicional utiliza el sistema de conmutación por paquete.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Falso"
+  },
+  {
+    "question": "Un atributo es una característica de una clase que la define o describe.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "¿Cuál de los siguientes elementos no corresponde a una de las funciones del Sistema Operativo?",
+    "options": [
+      "Controlar los dispositivos y gestionar conflictos entre ellos",
+      "Controlar el nivel de energía eléctrica del procesador",
+      "Vigilar el funcionamiento general del sistema",
+      "Ejecutar Software",
+      "Administrar recursos"
+    ],
+    "answer": "Controlar el nivel de energía eléctrica del procesador"
+  },
+  {
+    "question": "Las redes neuronales son procedimientos que, simulando el comportamiento de las neuronas, producen un ajuste en la precisión de sus estimaciones en la medida que le ingresan datos y se va refinando internamente.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "¿Cuáles de los siguientes elementos forman parte de un paradigma de software?",
+    "options": [
+      "Enfoques o modelos",
+      "Protocolos de comunicaciones",
+      "Principios",
+      "Mapas mentales de actividades",
+      "Bibliografía del problema a resolver",
+      "Equipos de computación",
+      "Patrones"
+    ],
+    "answer": "Enfoques o modelos"
+  },
+  {
+    "question": "Un datawarehouse es un software que se utiliza para administrar los datos de un centro de distribución de una empresa.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Falso"
+  },
+  {
+    "question": "¿Cuál de los siguientes pasos no corresponde a los pasos del proceso de toma de decisiones en las empresas según Simon?",
+    "options": [
+      "Diseño",
+      "Selección de una acción",
+      "Implantación de una solución",
+      "Obtención de conocimiento",
+      "Comparación de puntos de vista"
+    ],
+    "answer": "Obtención de conocimiento"
+  },
+  {
+    "question": "Un desarrollador puede aprender rápidamente uno de los lenguajes de programación de propósito general vigentes al momento, aunque debe atravesar una curva de aprendizaje.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "Dentro de la característica evaluable denominada 'Confiabilidad', la 'Tolerancia a fallas' hace referencia a la poca ocurrencia de las mismas.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Falso"
+  },
+  {
+    "question": "La calidad de uso es la percepción de la calidad que se forma el usuario al utilizar la aplicación.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "La calidad en el software habla de la concordancia con las especificaciones.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "Dentro de la característica evaluable denominada 'Funcionalidad', la 'Adecuación' hace referencia al conjunto de funciones apropiadas para las tareas y objetivos de los usuarios.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "La contraseña es un elemento que:",
+    "options": [
+      "Verifica la autenticidad de un individuo",
+      "Habilita una funcionalidad a una persona",
+      "No debe cambiarse bajo ningún aspecto",
+      "Identifica a un individuo"
+    ],
+    "answer": "Verifica la autenticidad de un individuo"
+  },
+  {
+    "question": "¿Cuál de las siguientes áreas NO corresponde a un área fundamental del software?",
+    "options": [
+      "Software Social",
+      "Utilitarios",
+      "Productos Financieros",
+      "Sistemas Operativos",
+      "Lenguajes de Programación"
+    ],
+    "answer": "Productos Financieros"
+  },
+  {
+    "question": "Dentro de la característica evaluable denominada 'Mantenibilidad', la 'Estabilidad' hace referencia a la capacidad de los efectos inesperados en los cambios de las aplicaciones.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "¿Qué es una función?",
+    "options": [
+      "Porción de código que realiza un determinado conjunto de instrucciones",
+      "Código vinculado que realiza un conjunto de acciones asociadas a un problema particular",
+      "Programa auxiliar que se comunica con una parte del programa principal",
+      "Expresión matemática que puede devolver uno a más resultados"
+    ],
+    "answer": "Porción de código que realiza un determinado conjunto de instrucciones"
+  },
+  {
+    "question": "La calidad en el software habla de la concordancia con las especificaciones.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "Dentro de la característica evaluable denominada 'Funcionalidad', la 'Adecuación' hace referencia al conjunto de funciones apropiadas para las tareas y objetivos de los usuarios.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "¿Cuál de los siguientes elementos no son utilizados para controlar el adecuado uso de los recursos?",
+    "options": [
+      "Perfil",
+      "Grupo",
+      "Contraseña",
+      "Barrera automática",
+      "Usuario"
+    ],
+    "answer": "Barrera automática"
+  },
+  {
+    "question": "En la arquitectura Maestro Esclavo no puede haber esclavos redundantes.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Falso"
+  },
+  {
+    "question": "¿Cuál de las siguientes siglas no corresponde a un sistema de apoyo a las decisiones?",
+    "options": [
+      "EDSS",
+      "EIS",
+      "GDSS",
+      "DSS",
+      "CRM"
+    ],
+    "answer": "CRM"
+  },
+  {
+    "question": "¿Cuál de las opciones no corresponde a un periférico de un sistema de cómputos?",
+    "options": [
+      "Sensor de Temperatura",
+      "Lector de huellas digitales",
+      "Cámara de Video",
+      "Monitor",
+      "Procesador"
+    ],
+    "answer": "Procesador"
+  },
+  {
+    "question": "Cuando los parámetros son pasados por referencia a una función, el dato se encuentra duplicado en dos porciones de la memoria.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Falso"
+  },
+  {
+    "question": "Las heurísticas son reglas que reducen una tarea compleja a pequeñas operaciones mentales.",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Verdadero"
+  },
+  {
+    "question": "La cláusula CIR sirve para:",
+    "options": [
+      "Filtrar los usuarios que puedan utilizar el servicio",
+      "Aceptar una tasa de degradación del servicio",
+      "Gestionar tráfico"
+    ],
+    "answer": "Aceptar una tasa de degradación del servicio"
+  },
+  {
+    "question": "¿Cuál de los siguientes tipos de sistemas no corresponde a un tipo de sistema de apoyo a las decisiones?",
+    "options": [
+      "EIS",
+      "DSS",
+      "GDSS",
+      "CRM",
+      "EDSS"
+    ],
+    "answer": "CRM"
+  },
+  {
+    "question": "¿Un lenguaje de bajo nivel es aquel en que un desarrollador de software construye habitualmente una aplicación?",
+    "options": ["Verdadero", "Falso"],
+    "answer": "Falso"
+  },
+  {
+    "question": "CSCW es:",
+    "options": [
+      "La disciplina que estudia las formas en las que la gente trabaja en equipo, con la tecnología que lo facilita",
+      "Las técnicas y herramientas que facilitan el desarrollo de software profesional",
+      "La corporación de software de cómputo",
+      "La categoría que identifica a los productos de software utilizados para las aplicaciones de juego",
+      "La disciplina que estudia la interacción entre las personas y el equipamiento computacional"
+    ],
+    "answer": "La disciplina que estudia las formas en las que la gente trabaja en equipo, con la tecnología que lo facilita"
+  }
+];
+    // Función para mezclar (shuffle) las preguntas
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // Mezclar las preguntas antes de mostrarlas
+    const shuffledQuestions = shuffle(questions);
+
+    const form = document.getElementById("testForm");
+
+    // Mostrar las preguntas desordenadas
+    shuffledQuestions.forEach((q, index) => {
+      const questionDiv = document.createElement("div");
+      questionDiv.classList.add("question");
+
+      const questionTitle = document.createElement("h3");
+      questionTitle.textContent = `${index + 1}. ${q.question}`;
+      questionDiv.appendChild(questionTitle);
+
+      const optionsDiv = document.createElement("div");
+      optionsDiv.classList.add("options");
+
+      q.options.forEach(option => {
+        const label = document.createElement("label");
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = `question${index}`;
+        input.value = option;
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(option));
+        optionsDiv.appendChild(label);
+      });
+
+      questionDiv.appendChild(optionsDiv);
+      form.appendChild(questionDiv);
+    });
+
+    document.getElementById("submit").addEventListener("click", () => {
+      let score = 0;
+      let resultsHtml = '';
+
+      shuffledQuestions.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="question${index}"]:checked`);
+        const selectedOption = selected ? selected.value : null;
+
+        // Verificar si la respuesta es correcta
+        if (selectedOption === q.answer) {
+          score++;
+          resultsHtml += `<p>Pregunta ${index + 1}: <span class="correct">Correcta! Respuesta: ${selectedOption}</span></p>`;
+        } else {
+          resultsHtml += `<p>Pregunta ${index + 1}: <span class="incorrect">Incorrecta. Respuesta seleccionada: ${selectedOption || 'Ninguna'} - Respuesta correcta: ${q.answer}</span></p>`;
+        }
+      });
+
+      document.getElementById("result").innerHTML = `
+        <p>Respuestas correctas: ${score} de ${shuffledQuestions.length}</p>
+        <div>${resultsHtml}</div>
+      `;
+    });
+  </script>
+</body>
+</html>
